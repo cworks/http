@@ -1,0 +1,29 @@
+description "Fluent wrapper around Apache's HttpClient"
+
+apply plugin: "java"
+apply plugin: "idea"
+
+compileJava {
+    sourceCompatibility=1.7
+    targetCompatibility=1.7
+}
+
+compileTestJava {
+    sourceCompatibility=1.7
+    targetCompatibility=1.7
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.apache.httpcomponents:httpclient:4.3.2")
+    compile("org.apache.httpcomponents:httpcore:4.3.2")
+    testCompile("junit:junit:4.11")
+}
+
+task wrapper(type: Wrapper, description: 'Generates the gradle wrapper.') {
+    gradleVersion = '1.11'
+}
