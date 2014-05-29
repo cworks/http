@@ -14,6 +14,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 public class HttpTest {
@@ -69,5 +70,47 @@ public class HttpTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void simpleGET() {
+
+        try {
+            File responseFile = new File("simpleClient.txt");
+            String response = Http.get("http://api.icndb.com/jokes/random").asString();
+            System.out.println(response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void simplePOST() {
+
+        try {
+            String response = Http.post("http://requestb.in/10m67h71")
+                .data("dataA", "valueA")
+                .param("paramA", "valueA")
+                .asString();
+
+            System.out.println(response);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void simplePUT() {
+
+        try {
+            String response = Http.put("http://requestb.in/10m67h71")
+                .data("dataD", "valueD")
+                .param("paramD", "valueD")
+                .asString();
+            System.out.println("put> " + response);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -8,14 +8,15 @@ package net.cworks.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,11 @@ public class HttpPostBuilder extends HttpRequestBuilder {
 
     public HttpPostBuilder(final String url) {
         super(url);
+    }
+
+    public HttpPostBuilder(final String url, final HttpClient client) {
+        this(url);
+        use(client);
     }
 
     @Override
@@ -113,31 +119,31 @@ public class HttpPostBuilder extends HttpRequestBuilder {
     protected HttpUriRequest createRequest() throws IOException {
         final HttpPost request;
         try {
-            final URIBuilder builder = new URIBuilder(url);
-            final List<NameValuePair> dataList = getParams();
-            for (final NameValuePair d : dataList) {
-                builder.addParameter(d.getName(), d.getValue());
-            }
-
-            request = new HttpPost(builder.toString());
-            HttpEntity httpEntity = null;
-
-            if(isNull(entity) && isNull(data) && isNull(body)) {
-                throw new IllegalArgumentException("one of {entity, data, body} must be non-null");
-            } else if(isNull(entity) && isNull(data) && !isNull(body)) {
-                httpEntity = new StringEntity(body, charset);
-            } else if(isNull(entity) && !isNull(data) && isNull(body)) {
-                httpEntity = new UrlEncodedFormEntity(data, charset);
-            } else if(!isNull(entity) && isNull(data) && isNull(body)) {
-                httpEntity = entity;
-            }
+            String url = urlWithParameters();
+            request = new HttpPost(url);
+            HttpEntity httpEntity = createEntity();
             request.setEntity(httpEntity);
-
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
         return request;
+    }
+
+    protected HttpEntity createEntity() throws UnsupportedEncodingException {
+        HttpEntity httpEntity = null;
+
+        if(Http.isNull(entity) && Http.isNull(data) && Http.isNull(body)) {
+            throw new IllegalArgumentException("one of {entity, data, body} must be non-null");
+        } else if(Http.isNull(entity) && Http.isNull(data) && !Http.isNull(body)) {
+            httpEntity = new StringEntity(body, charset);
+        } else if(Http.isNull(entity) && !Http.isNull(data) && Http.isNull(body)) {
+            httpEntity = new UrlEncodedFormEntity(data, charset);
+        } else if(!Http.isNull(entity) && Http.isNull(data) && Http.isNull(body)) {
+            httpEntity = entity;
+        }
+
+        return httpEntity;
     }
 
     protected List<NameValuePair> getData() {
@@ -167,13 +173,5 @@ public class HttpPostBuilder extends HttpRequestBuilder {
                 "You can't specify an entity OR data after setting the POST body.");
         }
     }
-
-    private static boolean isNull(Object o) {
-        if(o == null) {
-            return true;
-        }
-        return false;
-    }
-
 
 }

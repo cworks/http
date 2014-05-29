@@ -6,14 +6,12 @@
  */
 package net.cworks.http;
 
-import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 /**
  * GET-request builder.
@@ -25,15 +23,16 @@ public class HttpGetBuilder extends HttpRequestBuilder {
         super(url);
     }
 
+    public HttpGetBuilder(final String url, final HttpClient client) {
+        this(url);
+        use(client);
+    }
+
     @Override
     protected HttpUriRequest createRequest() throws IOException {
         try {
-            final URIBuilder builder = new URIBuilder(url);
-            final List<NameValuePair> params = getParams();
-            for (final NameValuePair param : params) {
-                builder.addParameter(param.getName(), param.getValue());
-            }
-            return new HttpGet(builder.toString());
+            String url = urlWithParameters();
+            return new HttpGet(url);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

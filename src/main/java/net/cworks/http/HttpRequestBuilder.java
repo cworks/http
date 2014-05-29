@@ -14,12 +14,14 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,27 @@ import java.util.Map;
 public abstract class HttpRequestBuilder {
 
     protected final String url;
+
+    /**
+     * Apache Http Client we're delegating to
+     */
     protected HttpClient client;
+
+    /**
+     * Host to which we're communicating
+     */
+    protected String host;
+
+    /**
+     * Port to which we're communicating
+     */
+    protected Integer port;
+
+    /**
+     * Rendered path (i.e. has variable substituions made)
+     */
+    protected String path;
+
     protected List<Header> headers;
     protected List<NameValuePair> params;
     protected List<RequestMixin> mixins;
@@ -285,8 +307,17 @@ public abstract class HttpRequestBuilder {
         return params;
     }
 
-    protected String getUrl() {
+    protected String url() {
         return url;
+    }
+
+    protected String urlWithParameters() throws URISyntaxException {
+        final URIBuilder builder = new URIBuilder(url);
+        final List<NameValuePair> params = getParams();
+        for (final NameValuePair param : params) {
+            builder.addParameter(param.getName(), param.getValue());
+        }
+        return builder.toString();
     }
 
     protected List<Header> getHeaders() {
