@@ -43,7 +43,7 @@ public class HttpPostBuilder extends HttpRequestBuilder {
     }
 
     @Override
-    public HttpRequestBuilder entity(final HttpEntity entity) {
+    public HttpPostBuilder entity(final HttpEntity entity) {
         ensureNoData();
         ensureNoBody();
         this.entity = entity;
@@ -56,7 +56,7 @@ public class HttpPostBuilder extends HttpRequestBuilder {
      * @param value
      * @return
      */
-    public HttpRequestBuilder data(final String name, final String value) {
+    public HttpPostBuilder data(final String name, final String value) {
         ensureNoEntity();
         ensureNoBody();
         getData().add(new BasicNameValuePair(name, value));
@@ -68,7 +68,7 @@ public class HttpPostBuilder extends HttpRequestBuilder {
      * @param data
      * @return
      */
-    public HttpRequestBuilder data(final NameValuePair... data) {
+    public HttpPostBuilder data(final NameValuePair... data) {
         ensureNoEntity();
         ensureNoBody();
         if (data != null) {
@@ -87,7 +87,7 @@ public class HttpPostBuilder extends HttpRequestBuilder {
      * @param data
      * @return
      */
-    public HttpRequestBuilder data(final Map<?, ?> data) {
+    public HttpPostBuilder data(final Map<?, ?> data) {
         ensureNoEntity();
         ensureNoBody();
         final List<NameValuePair> dataList = getData();
@@ -108,7 +108,7 @@ public class HttpPostBuilder extends HttpRequestBuilder {
      * @param body
      * @return
      */
-    public HttpRequestBuilder body(final String body) {
+    public HttpPostBuilder body(final String body) {
         ensureNoData();
         ensureNoEntity();
         this.body = body;

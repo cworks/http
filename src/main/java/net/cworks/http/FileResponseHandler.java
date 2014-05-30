@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static net.cworks.http.Http.closeQuietly;
+
 /**
  * Saves the stream to a file and returns <code>true</code>, if no error
  * occurred while saving.
@@ -25,11 +27,11 @@ import java.io.OutputStream;
  */
 public class FileResponseHandler implements ResponseHandler<Boolean> {
 
-    protected final File file;
+    protected final File target;
     protected final String url;
 
-    public FileResponseHandler(final File file, final String url) {
-        this.file = file;
+    public FileResponseHandler(final File target, final String url) {
+        this.target = target;
         this.url = url;
     }
 
@@ -47,20 +49,23 @@ public class FileResponseHandler implements ResponseHandler<Boolean> {
             return false;
         }
 
-        return copyStreamToFile(entity.getContent(), file);
+        return copyStreamToFile(entity.getContent(), target);
     }
 
-    protected boolean copyStreamToFile(final InputStream source, final File target) throws IOException {
-        final byte[] buffer = new byte[1024 * 4];
+    protected boolean copyStreamToFile(final InputStream source, final File target)
+        throws IOException {
+
+        final byte[] buffer = new byte[1024 * 8];
         final OutputStream out = new FileOutputStream(target);
         int read = 0;
-        while ((read = source.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
-        }
         try {
-            out.close();
-        } catch (final IOException ignore) {
+            while ((read = source.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+        } finally {
+            closeQuietly(out);
         }
+
         return true;
     }
 

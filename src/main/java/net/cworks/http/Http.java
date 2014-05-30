@@ -15,6 +15,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.nio.charset.Charset;
 
 public final class Http {
@@ -77,6 +79,16 @@ public final class Http {
         return new HttpPostBuilder(url, createHttpClient());
     }
 
+    /**
+     * Creates a builder object for a Multipart Post request.
+     *
+     * @param url the URL to use for this request.
+     * @return the builder object for this URL.
+     */
+    public static HttpMultiPartBuilder multipart(final String url) {
+        return new HttpMultiPartBuilder(url, createHttpClient());
+    }
+
     public static HttpPutBuilder put(final String url) {
         return new HttpPutBuilder(url, createHttpClient());
     }
@@ -119,6 +131,16 @@ public final class Http {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Quietly close a Closeable
+     * @param closable
+     */
+    public static void closeQuietly(Closeable closable) {
+        try {
+            closable.close();
+        } catch (final IOException ignore) { }
     }
 
 }

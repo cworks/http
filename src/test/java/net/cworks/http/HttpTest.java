@@ -9,6 +9,7 @@ package net.cworks.http;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.junit.BeforeClass;
@@ -98,6 +99,26 @@ public class HttpTest {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Test
+    public void simpleUpload() {
+
+        try {
+            String response = Http.multipart("http://requestb.in/10m67h71")
+                .upload(new File("src/test/resources/data/nacho_libre.pdf"),
+                    ContentType.create("application/pdf"))
+                .upload(new File("src/test/resources/data/nacho_eggs.png"),
+                    ContentType.create("image/png"))
+                .data("dataA", "valueA")
+                .param("paramA", "valueA")
+                .asString();
+
+            System.out.println(response);
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     @Test

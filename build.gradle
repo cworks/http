@@ -1,7 +1,10 @@
 description "Fluent wrapper around Apache's HttpClient"
 
 apply plugin: "java"
+apply plugin: "maven"
 apply plugin: "idea"
+
+group = "net-cworks"
 
 compileJava {
     sourceCompatibility=1.7
@@ -21,6 +24,7 @@ repositories {
 dependencies {
     compile("org.apache.httpcomponents:httpclient:4.3.2")
     compile("org.apache.httpcomponents:httpcore:4.3.2")
+    compile("org.apache.httpcomponents:httpmime:4.3.2")
     testCompile("junit:junit:4.11")
 }
 
