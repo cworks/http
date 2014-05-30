@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.StringBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,13 +90,12 @@ public class HttpMultiPartBuilder extends HttpPostBuilder {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         // add usual form parameters this way
         for(FileInfo fileInfo : files) {
-            //builder.addPart("filename", new StringBody(fileInfo.file.getName(), ContentType.TEXT_PLAIN));
-            builder.addBinaryBody("fileupload-" + fileInfo.file.getName(), fileInfo.file);
+            builder.addBinaryBody(fileInfo.file.getName(), fileInfo.file);
         }
 
         for(NameValuePair pair : getData()) {
-            //builder.addPart(pair.getName(),
-            //    new StringBody(pair.getValue(), ContentType.TEXT_PLAIN));
+            builder.addPart(pair.getName(),
+                new StringBody(pair.getValue(), ContentType.TEXT_PLAIN));
         }
 
         return builder.build();
