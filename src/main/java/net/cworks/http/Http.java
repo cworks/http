@@ -89,8 +89,22 @@ public final class Http {
         return new HttpMultiPartBuilder(url, createHttpClient());
     }
 
+    /**
+     * Creates a builder object for a Put request
+     * @param url the URL to use for Put
+     * @return the builder object for this URL.
+     */
     public static HttpPutBuilder put(final String url) {
         return new HttpPutBuilder(url, createHttpClient());
+    }
+
+    /**
+     * Creates a builder object for a Delete request
+     * @param url the URL to use for Delete
+     * @return the builder object for this URL.
+     */
+    public static HttpDeleteBuilder delete(final String url) {
+        return new HttpDeleteBuilder(url, createHttpClient());
     }
 
     /**
