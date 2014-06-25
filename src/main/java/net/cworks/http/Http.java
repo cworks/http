@@ -99,6 +99,15 @@ public final class Http {
     }
 
     /**
+     * Creates a builder object for a Patch request
+     * @param url the URL to use for Patch
+     * @return the builder object for this URL.
+     */
+    public static HttpPatchBuilder patch(final String url) {
+        return new HttpPatchBuilder(url, createHttpClient());
+    }
+
+    /**
      * Creates a builder object for a Delete request
      * @param url the URL to use for Delete
      * @return the builder object for this URL.
@@ -118,18 +127,19 @@ public final class Http {
      *         response body exists or an error occurred while converting.
      * @throws NullPointerException if the given response was null
      */
-    public static String asString(final HttpResponse response, final String defaultCharset) {
-        if (response == null) {
+     static String asString(final HttpResponse response, final String defaultCharset) {
+        if(response == null) {
             throw new NullPointerException();
         }
 
         final HttpEntity entity = response.getEntity();
-        if (entity == null) {
+        if(entity == null) {
             return null;
         }
 
         try {
-            return EntityUtils.toString(entity, defaultCharset == null ? (Charset) null : Charset.forName(defaultCharset));
+            return EntityUtils.toString(
+                entity, defaultCharset == null ? (Charset) null : Charset.forName(defaultCharset));
         } catch (final Exception e) {
             return null;
         }
@@ -151,7 +161,7 @@ public final class Http {
      * Quietly close a Closeable
      * @param closable
      */
-    public static void closeQuietly(Closeable closable) {
+    static void closeQuietly(Closeable closable) {
         try {
             closable.close();
         } catch (final IOException ignore) { }

@@ -4,10 +4,13 @@
  * Date: 5/23/14
  * Time: 9:35 PM
  */
-package net.cworks.http;
+package net.cworks.http.examples;
 
+import net.cworks.http.Http;
+import net.cworks.http.RequestMixin;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -39,16 +42,16 @@ public class HttpTest {
     public static void createHttpClient() {
         HttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         httpClient = HttpClientBuilder.create()
-                .setDefaultRequestConfig(requestConfig())
-                .setConnectionManager(connectionManager)
-                .build();
+            .setDefaultRequestConfig(requestConfig())
+            .setConnectionManager(connectionManager)
+            .build();
     }
 
     private static RequestConfig requestConfig() {
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(CONNECTION_TIMEOUT)
-                .setConnectionRequestTimeout(READ_TIMEOUT)
-                .build();
+            .setConnectTimeout(CONNECTION_TIMEOUT)
+            .setConnectionRequestTimeout(READ_TIMEOUT)
+            .build();
         return config;
     }
 
@@ -59,12 +62,8 @@ public class HttpTest {
             String response = Http.get("http://api.icndb.com/jokes/random")
                 .use(httpClient).asString();
 
-            // caller provides the httpClient
-            // Http.use(httpClient).get("http://api.icndb.com/jokes/random").asString();
-
             // caller uses baked in HttpClient
-            Http.get("http://api.icndb.com/jokes/random").asString();
-
+            response = Http.get("http://api.icndb.com/jokes/random").asString();
 
             System.out.println(response);
         } catch (IOException e) {
@@ -134,4 +133,33 @@ public class HttpTest {
             ex.printStackTrace();
         }
     }
+
+    @Test
+    public void simpleExample() {
+        try {
+            String response = Http.get("http://www.google.com").asString();
+            System.out.println(response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void simpleMixin() {
+
+        try {
+            String response = Http.get("http://zip.getziptastic.com/v2/US/76102")
+                .mixin(new RequestMixin() {
+                    @Override
+                    public void mixin(HttpUriRequest request) {
+                        request.setHeader("cray", "cray");
+                    }
+            }).asString();
+            System.out.println(response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
 }

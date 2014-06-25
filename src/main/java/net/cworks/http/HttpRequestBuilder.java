@@ -49,14 +49,33 @@ public abstract class HttpRequestBuilder {
     protected Integer port;
 
     /**
-     * Rendered path (i.e. has variable substituions made)
+     * Rendered path (i.e. has variable substitutions made)
      */
     protected String path;
 
+    /**
+     * Http request headers
+     */
     protected List<Header> headers;
+
+    /**
+     * Http URL parameters
+     */
     protected List<NameValuePair> params;
+
+    /**
+     * Request mixins that will be applied to request before its sent
+     */
     protected List<RequestMixin> mixins;
-    protected String charset = null;
+
+    /**
+     * default character set, can be overridden
+     */
+    protected String charset = "UTF-8";
+
+    /**
+     * The actual apache request instance we're building
+     */
     protected HttpUriRequest request;
 
     /**
@@ -81,7 +100,7 @@ public abstract class HttpRequestBuilder {
      */
     public HttpRequestBuilder entity(final HttpEntity entity) {
         throw new UnsupportedOperationException(
-                "This HTTP-method doesn't support to add an entity.");
+            "This HTTP-method doesn't support adding an entity.");
     }
 
     /**
@@ -92,7 +111,7 @@ public abstract class HttpRequestBuilder {
      * @throws UnsupportedOperationException if this request not supports params modifications
      */
     public HttpRequestBuilder params(final NameValuePair... params) {
-        if (params != null) {
+        if(params != null) {
             final List<NameValuePair> paramsList = getParams();
             for (final NameValuePair param : params) {
                 if (param != null) {
@@ -213,7 +232,7 @@ public abstract class HttpRequestBuilder {
     public HttpResponse asResponse() throws IOException {
         if (client == null) {
             throw new IllegalStateException(
-                    "Please specify a HttpClient instance to use for this request.");
+                "Please specify a HttpClient instance to use for this request.");
         }
 
         request = createFinalRequest();

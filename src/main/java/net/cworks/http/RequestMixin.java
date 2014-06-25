@@ -14,12 +14,12 @@ import org.apache.http.client.methods.HttpUriRequest;
  * before its executed.
  *
  */
-interface RequestMixin {
+public interface RequestMixin {
 
     /**
      * Customizes the request before the execution is done.
      *
      * @param request the request to mixin
      */
-    void mixin(final HttpUriRequest request);
+    public void mixin(final HttpUriRequest request);
 }
