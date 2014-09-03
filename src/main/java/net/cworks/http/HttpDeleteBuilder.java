@@ -6,9 +6,9 @@
  */
 package net.cworks.http;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,9 +19,9 @@ public class HttpDeleteBuilder extends HttpRequestBuilder {
         super(url);
     }
 
-    public HttpDeleteBuilder(final String url, final HttpClient client) {
+    public HttpDeleteBuilder(final String url, final HttpClientBuilder builder) {
         this(url);
-        use(client);
+        use(builder);
     }
 
     @Override

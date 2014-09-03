@@ -6,9 +6,9 @@
  */
 package net.cworks.http;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -19,13 +19,13 @@ import java.net.URISyntaxException;
  */
 public class HttpGetBuilder extends HttpRequestBuilder {
 
-    public HttpGetBuilder(final String url) {
+    protected HttpGetBuilder(final String url) {
         super(url);
     }
 
-    public HttpGetBuilder(final String url, final HttpClient client) {
+    protected HttpGetBuilder(final String url, final HttpClientBuilder builder) {
         this(url);
-        use(client);
+        use(builder);
     }
 
     @Override

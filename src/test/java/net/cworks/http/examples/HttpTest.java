@@ -146,7 +146,6 @@ public class HttpTest {
 
     @Test
     public void simpleMixin() {
-
         try {
             String response = Http.get("http://zip.getziptastic.com/v2/US/76102")
                 .mixin(new RequestMixin() {
@@ -159,7 +158,21 @@ public class HttpTest {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
 
+    @Test
+    public void basicAuth() {
+        try {
+            String response = Http
+                .get("http://zip.getziptastic.com/v2/US/76102")
+                .port(8080)
+                .username("foo")
+                .password("bar")
+                .asString();
+            System.out.println(response);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

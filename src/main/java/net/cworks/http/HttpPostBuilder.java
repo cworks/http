@@ -8,11 +8,11 @@ package net.cworks.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
@@ -33,13 +33,13 @@ public class HttpPostBuilder extends HttpRequestBuilder {
     protected List<NameValuePair> data;
     protected String body;
 
-    public HttpPostBuilder(final String url) {
+    protected HttpPostBuilder(final String url) {
         super(url);
     }
 
-    public HttpPostBuilder(final String url, final HttpClient client) {
+    protected HttpPostBuilder(final String url, final HttpClientBuilder builder) {
         this(url);
-        use(client);
+        use(builder);
     }
 
     @Override

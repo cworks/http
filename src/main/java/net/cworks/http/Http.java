@@ -8,7 +8,6 @@ package net.cworks.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -27,20 +26,34 @@ public final class Http {
     public static final int CONNECTION_TIMEOUT = 60000;
 
     /**
-     * Default timeout to use for requests to Cs2
+     * Default timeout to use for requests
      */
     public static final int READ_TIMEOUT = 60000;
 
     /**
      * create default HttpClient
      */
-    private static HttpClient createHttpClient() {
+//    private static HttpClient createHttpClient() {
+//        HttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+//        HttpClient httpClient = HttpClientBuilder.create()
+//            .setDefaultRequestConfig(requestConfig())
+//            .setConnectionManager(connectionManager)
+//            .build();
+//
+//        return httpClient;
+//    }
+
+    /**
+     * create HttpClientBuilder
+     * @return
+     */
+    private static HttpClientBuilder createHttpClient() {
         HttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-        HttpClient httpClient = HttpClientBuilder.create()
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
             .setDefaultRequestConfig(requestConfig())
-            .setConnectionManager(connectionManager)
-            .build();
-        return httpClient;
+            .setConnectionManager(connectionManager);
+
+        return httpClientBuilder;
     }
 
     /**

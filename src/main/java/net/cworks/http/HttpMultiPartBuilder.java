@@ -8,12 +8,12 @@ package net.cworks.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +42,8 @@ public class HttpMultiPartBuilder extends HttpPostBuilder {
         files = new ArrayList<FileInfo>();
     }
 
-    public HttpMultiPartBuilder(String url, HttpClient client) {
-        super(url, client);
+    public HttpMultiPartBuilder(String url, HttpClientBuilder builder) {
+        super(url, builder);
         files = new ArrayList<FileInfo>();
     }
 

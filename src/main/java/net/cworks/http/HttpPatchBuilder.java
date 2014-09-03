@@ -10,21 +10,21 @@
 package net.cworks.http;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class HttpPatchBuilder extends HttpPostBuilder {
 
-    public HttpPatchBuilder(final String url) {
+    protected HttpPatchBuilder(final String url) {
         super(url);
     }
 
-    public HttpPatchBuilder(final String url, final HttpClient client) {
-        super(url, client);
+    protected HttpPatchBuilder(final String url, final HttpClientBuilder builder) {
+        super(url, builder);
     }
 
     @Override

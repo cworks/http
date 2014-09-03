@@ -9,21 +9,21 @@
 package net.cworks.http;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class HttpPutBuilder extends HttpPostBuilder {
 
-    public HttpPutBuilder(final String url) {
+    protected HttpPutBuilder(final String url) {
         super(url);
     }
 
-    public HttpPutBuilder(final String url, final HttpClient client) {
-        super(url, client);
+    protected HttpPutBuilder(final String url, final HttpClientBuilder builder) {
+        super(url, builder);
 
     }
 
