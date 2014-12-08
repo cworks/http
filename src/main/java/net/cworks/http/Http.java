@@ -31,19 +31,6 @@ public final class Http {
     public static final int READ_TIMEOUT = 60000;
 
     /**
-     * create default HttpClient
-     */
-//    private static HttpClient createHttpClient() {
-//        HttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
-//        HttpClient httpClient = HttpClientBuilder.create()
-//            .setDefaultRequestConfig(requestConfig())
-//            .setConnectionManager(connectionManager)
-//            .build();
-//
-//        return httpClient;
-//    }
-
-    /**
      * create HttpClientBuilder
      * @return
      */

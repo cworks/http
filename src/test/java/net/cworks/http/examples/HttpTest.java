@@ -8,6 +8,7 @@ package net.cworks.http.examples;
 
 import net.cworks.http.Http;
 import net.cworks.http.RequestMixin;
+import net.cworks.http2.Http2;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -17,6 +18,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import sun.misc.BASE64Encoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,6 +97,7 @@ public class HttpTest {
                 .asString();
 
             System.out.println(response);
+
         } catch(IOException ex) {
             ex.printStackTrace();
         }
@@ -164,14 +167,35 @@ public class HttpTest {
     public void basicAuth() {
         try {
             String response = Http
-                .get("http://zip.getziptastic.com/v2/US/76102")
-                .port(8080)
-                .username("foo")
-                .password("bar")
+                .get("http://httpbin.org/basic-auth/bucky/nacho")
+                .port(80)
+                .mixin(new RequestMixin() {
+                    @Override
+                    public void mixin(HttpUriRequest request) {
+                        BASE64Encoder encoder = new BASE64Encoder();
+                        request.setHeader("Authorization",
+                            "Basic " + encoder.encode("bucky:nacho".getBytes()));
+                    }
+                })
                 .asString();
+
             System.out.println(response);
+
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testHttp2Use() {
+
+        try {
+            String response = Http2.get("http://httpbin.org/basic-auth/bucky/nacho")
+                .username("bucky")
+                .password("nacho").asString();
+            System.out.println(response);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

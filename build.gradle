@@ -1,4 +1,4 @@
-description "Fluent wrapper around Apache's HttpClient"
+description "Semi Fluent wrapper around Apache's HttpClient"
 
 apply plugin: "java"
 apply plugin: "maven"

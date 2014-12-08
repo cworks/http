@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -105,6 +106,11 @@ public abstract class HttpRequestBuilder {
      * default character set, can be overridden
      */
     protected String charset = "UTF-8";
+
+    /**
+     * Whether or not redirects (302) should be followed
+     */
+    private boolean followRedirects = false;
 
     /**
      * The actual apache request instance we're building
@@ -301,6 +307,15 @@ public abstract class HttpRequestBuilder {
     }
 
     /**
+     * If called the request will follow Http redirects 302
+     * @return
+     */
+    public HttpRequestBuilder followRedirect() {
+        this.followRedirects = true;
+        return this;
+    }
+
+    /**
      * Executes this request and returns the result as a
      * {@linkplain org.apache.http.HttpResponse} object.
      *
@@ -451,6 +466,11 @@ public abstract class HttpRequestBuilder {
     }
 
     private HttpUriRequest createFinalRequest() throws IOException {
+
+        if(followRedirects) {
+            this.builder.setRedirectStrategy(new LaxRedirectStrategy());
+        }
+
         final HttpUriRequest request = createRequest();
 
         applyHeaders(request);
